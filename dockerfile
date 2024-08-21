@@ -1,25 +1,3 @@
-# # ベースイメージとしてtensorflow/tensorflow:2.13.0-gpuを使用
-# FROM tensorflow/tensorflow:2.13.0-gpu
-
-# # 必要なライブラリをインストールするためにapt-getを更新し、pipを使用してライブラリをインストール
-# RUN apt-get update && apt-get install -y \
-#     && pip install --no-cache-dir \
-#     hydra-core==1.3.2 \
-#     hydra-colorlog==1.2.0 \
-#     hydra-optuna-sweeper==1.2.0 \
-#     rootutils \
-#     pre-commit \
-#     rich \
-#     pytest \
-#     pyDOE \
-#     scipy \
-#     matplotlib
-
-# RUN pip install pinnstf
-
-# # 不要なパッケージを削除
-# RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
 # CUDAの公式ベースイメージを使用
 FROM nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04
 
