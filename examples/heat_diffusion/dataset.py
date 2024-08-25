@@ -87,8 +87,11 @@ def heat_diffusion_dataset():
     print(f'{u.shape=}')
     
     # heat map保存
+    output_dir = os.path.join(current_dir, 'outputs')
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
     save_heat_map(X_arr, T_arr, u, 
-                  os.path.join(current_dir, 'heat_diffusion_heatmap.png'))
+                  os.path.join(output_dir, 'heat_diffusion_heatmap.png'))
 
     
     # mat file 保存
