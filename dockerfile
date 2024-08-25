@@ -43,3 +43,5 @@ ENV CUDA_HOME=/usr/local/cuda
 
 # シンボリックリンクを作成してpython3コマンドをpython3.9に対応させる
 RUN ln -sf /usr/bin/python3.9 /usr/bin/python3
+RUN ln -sf /usr/bin/python3.9 /usr/bin/python
+RUN ln -sf /usr/bin/pip3.9 /usr/bin/pip3
