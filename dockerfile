@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.9
 
 # TensorFlowをインストール
-RUN pip3.9 install --no-cache-dir tensorflow==2.13.0
+RUN pip3.9 install --no-cache-dir tensorflow==2.13.0 --default-timeout=1000
 
 # 必要なPythonライブラリをインストール
 RUN pip3.9 install --no-cache-dir \

@@ -16,8 +16,9 @@ def read_data_fn(root_path):
     :return: Processed data will be used in Mesh class.
     """
 
-    data = pinnstf2.utils.load_data(root_path, "burgers_shock.mat")
+    data = pinnstf2.utils.load_data(root_path, "heat_diffusion.mat")
     exact_u = np.real(data["u"])
+    exact_u = 2 * (exact_u - np.min(exact_u)) / (np.max(exact_u) - np.min(exact_u)) - 1 
     return {"u": exact_u}
 
 def get_pde_fn(alpha):
@@ -26,11 +27,9 @@ def get_pde_fn(alpha):
             t: tf.Tensor):  
         """Define the partial differential equations (PDEs)."""
 
-        U = outputs["u"][:, :-1]
-        U_x = pinnstf2.utils.fwd_gradient(U, x)
-        U_xx = pinnstf2.utils.fwd_gradient(U_x, x)
-        U_t = pinnstf2.utils.fwd_gradient(U, t)
-        outputs["f"] = alpha * U_xx - U_t
+        u_x, u_t = pinnstf2.utils.gradient(outputs["u"], [x, t])
+        u_xx = pinnstf2.utils.gradient(u_x, x)
+        outputs["f"] = alpha * u_xx - u_t
         return outputs
     return pde_fn
 
@@ -49,8 +48,9 @@ def main(cfg: DictConfig) -> Optional[float]:
     pinnstf2.utils.extras(cfg)
 
     # train the model
+    pde_fn = get_pde_fn(cfg.get('alpha'))
     metric_dict, _ = pinnstf2.train(
-        cfg, read_data_fn=read_data_fn, pde_fn=get_pde_fn(alpha=cfg.get('alpha')), output_fn=None
+        cfg, read_data_fn=read_data_fn, pde_fn=pde_fn, output_fn=None
     )
 
     # safely retrieve metric value for hydra-based hyperparameter optimization
